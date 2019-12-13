@@ -13,11 +13,7 @@ shinyServer(function(input, output) {
     cl_path <- "CCLE/Clusters/"
     cl2_files <- list.files(cl_path)
     cluster_filebase <- cl2_files[grepl("csv", cl2_files) & grepl("gmm", cl2_files)] %>% tools::file_path_sans_ext()
-    
-    
-    
-    cluster_filepath <- paste0(cl_path, "/", cluster_filebase,
-                               ".csv")
+    cluster_filepath <- paste0(cl_path, "/", cluster_filebase, ".csv")
     
     clusters_raw <- list()
     for(i in 1:length(cluster_filepath)){
@@ -34,7 +30,6 @@ shinyServer(function(input, output) {
         x$Tissue_Type <- ccle_annot$lineage[match(x$Cell_Line, ccle_annot$DepMap_ID)]
         x
     })
-    
     
     cluster_ids <- c(
         "gmm_exp_2_pc_7_clusters.csv",
@@ -53,7 +48,6 @@ shinyServer(function(input, output) {
         "8 GMM clusters based on PC's that explain >=70% of variance in the expression, SNV, and mutational signature data",
         "9 GMM clusters based on top 3 PC's from mutational signature data",
         "8 GMM clusters based on top 2 PC's from SNV data"
-        
     )
     
     output$this_clust_desc <- renderText(paste0(
@@ -208,16 +202,16 @@ shinyServer(function(input, output) {
         min_nonzero_pe <- pd$p[pd$padj_2 == min(nonzero_p)][1]
         pd$p[pd$p == "0.00e+00"] <- paste0("<", min_nonzero_pe)
         
-        # annotations <- data.frame(
-        #     xpos = c(-Inf,-Inf,Inf,Inf),
-        #     ypos =  c(-Inf, Inf,-Inf,Inf),
-            # annotateText = c( #bottom left, top left, bottom right, top right
-            #     paste0("Drug MOA: ", dsdata$moa[dsdata$Drug == drug][1]), 
-            #     "", 
-            #     paste0("PlotID: ", "Clust", clustname, "-", "Tx", drug), 
-            #     ""),
-            # hjustvar = c(0,0,1,1) ,
-            # vjustvar = c(0,1,0,1)) #<- adjust
+        annotations <- data.frame(
+            xpos = c(-Inf,-Inf,Inf,Inf),
+            ypos =  c(-Inf, Inf,-Inf,Inf),
+        annotateText = c( #bottom left, top left, bottom right, top right
+            paste0("Drug MOA: ", dsdata$moa[dsdata$Drug == drug][1]),
+            "",
+            "", # paste0("PlotID: ", "Clust", clustname, "-", "Tx", drug),
+            ""),
+        hjustvar = c(0,0,1,1) ,
+        vjustvar = c(0,1,0,1)) #<- adjust
         
         txt_size <- 15
         
@@ -231,19 +225,16 @@ shinyServer(function(input, output) {
             
             #Main Data
             geom_boxplot(alpha = 0.5) +
-            # geom_point(aes(color = Tissue_Type)) +
-            geom_jitter(width = 0.1, 
+            geom_jitter(width = 0.1, size = 3,
                         aes(color = Tissue_Type)) +
             ggtitle(paste("ClustMethod:", clustname, ", Drug: ", drug)) +
             
-            
-            # stat_compare_means(comparisons = signif_pairs) +
             ggpubr::stat_pvalue_manual(data = pd, y.position = "y.position") +
             
-            # geom_text(data = annotations,
-            #           aes(x = xpos, y = ypos, 
-            #               hjust = hjustvar, vjust = vjustvar,
-            #               label = annotateText)) +
+            geom_text(data = annotations,
+                      aes(x = xpos, y = ypos,
+                          hjust = hjustvar, vjust = vjustvar,
+                          label = annotateText)) +
             
             ylab("Log2 Fold Change vs. DMSO") +
             xlab("Group ID") +
@@ -341,22 +332,14 @@ shinyServer(function(input, output) {
             all_hit_drugs %>% strsplit("_") %>% lapply(FUN = function(x) x[1]) %>% unlist
         hit_moa_drugs <- all_hit_drugs_simple[all_hit_drugs_simple %in% moa_drugs]
         
-        # hit_moa_drugs_complex <-
-        #     all_hit_drugs[match(hit_moa_drugs, all_hit_drugs_simple)]
-        
         selectInput("drug", "Choose Drug:", as.list(hit_moa_drugs)) 
         
     })
-    
-    
-    
-    # this_drug <- input$drug
     
     # ----
     # Output
     # ---
     
-    # output$done <- renderText("done")
     output$clustername <- renderText(paste0("Model: ",names(clusters_raw)[input$clustid]))
     output$ccle_barplot <- renderPlot(clust_tx_gg_list[[input$clustid]])
     output$tcga_barplot <- renderPlot(tcga_clust_tx_gg_list[[input$clustid]])
