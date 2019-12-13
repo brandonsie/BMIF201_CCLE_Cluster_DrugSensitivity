@@ -1,7 +1,8 @@
 library(shiny)
+library(shinythemes)
 
 # UI inputs / ouputs
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = shinytheme("flatly"), 
 
     # Application title
     titlePanel("CCLE Cluster Drug Sensitivity"),
