@@ -35,6 +35,33 @@ shinyServer(function(input, output) {
         x
     })
     
+    
+    cluster_ids <- c(
+        "gmm_exp_2_pc_7_clusters.csv",
+        "gmm_exp_55_pc_6_clusters.csv",
+        "gmm_exp_55_pc_9_clusters.csv",
+        "gmm_exp_snv_9_clusters.csv",
+        "gmm_exp_snv_mutsig_8_clusters.csv",
+        "gmm_mutsig_3_pc_9_clusters.csv",
+        "gmm_snv_2_pc_8_clusters.csv"
+    )
+    cluster_descriptions <- c(
+        "7 GMM clusters based on top 2 principal components from expression data",
+        "6 GMM clusters based on PC's that explain >=70% of variance in the expression data",
+        "9 GMM clusters based on PC's that explain >=70% of variance in the expression data",
+        "9 GMM clusters based on PC's that explain >=70% of variance in the expression and SNV data",
+        "8 GMM clusters based on PC's that explain >=70% of variance in the expression, SNV, and mutational signature data",
+        "9 GMM clusters based on top 3 PC's from mutational signature data",
+        "8 GMM clusters based on top 2 PC's from SNV data"
+        
+    )
+    
+    output$this_clust_desc <- renderText(paste0(
+        "Model Description: ",
+        cluster_descriptions[input$clustid]
+    ))
+    
+    
     # ----
     # Plot Agreement Tissue Type
     # ----
@@ -271,11 +298,6 @@ shinyServer(function(input, output) {
     
     output$choose_n_signif <- renderUI({
         # id max number of hits
-        # max_hits <- 0
-        # for(i in pairwise_drug_hits$Drug %>% unique){
-        #     n_hits <- nrow(pairwise_drug_hits[pairwise_drug_hits$ClustMethod == input$clustid & Drug == i,])
-        #     if(n_hits > max_hits) max_hits <- n_hits
-        # }
         
         sliderInput("n_signif",
                     "Choose Minimum Significant Pairwise Comparisons",
@@ -293,9 +315,6 @@ shinyServer(function(input, output) {
         pairwise_drug_hits[pairwise_drug_hits$Drug %in% hpd_df_sub$drug,]
     })
     
-    output$hits_filtered_head <- renderTable(dim(hits_filtered()))
-    output$nsignif <- renderTable(hits_per_drug())
-
     
     # Choose Drug MOA to Plot
     output$choose_moa <- renderUI({

@@ -18,6 +18,7 @@ shinyUI(fluidPage(
                         value = 1),
             
             textOutput("clustername"),
+            textOutput("this_clust_desc"),
             br(),
             
             uiOutput("choose_n_signif"),
@@ -27,7 +28,12 @@ shinyUI(fluidPage(
             
             br(),
             
+            # Info
             
+            p(
+                "A bit more information is available at the ",
+                a("Github Repo", href="https://github.com/brandonsie/BMIF201_CCLE_Cluster_DrugSensitivity")
+            ),
             br()
             
         ),
@@ -39,15 +45,14 @@ shinyUI(fluidPage(
             
             #plotOutput("distPlot")
             # tableOutput("dimThis")
+            h3("CCLE Cluster Drug Sensitivity Plot"),
             plotOutput("drug_plot"),
             
-            p("CCLE Cell Line Cluster Assignments"),
-            plotOutput("ccle_barplot"),
-            p("TCGA Tumor Sample Cluster Assignments"),
-            plotOutput("tcga_barplot"),
+            h3("CCLE Cell Line Cluster Assignments"),
+            plotOutput("ccle_barplot", height = "200px"),
+            h3("TCGA Tumor Sample Cluster Assignments"),
+            plotOutput("tcga_barplot", height = "200px")
             
-            tableOutput("hits_filtered_head"),
-            tableOutput("nsignif")
             
         )
     )
