@@ -13,4 +13,4 @@ Source Data:
 * [TCGA](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga)  
 * [GTEx](https://gtexportal.org/home/datasets)
 
-Shiny App: [https://brandonsie.shinyapps.io/BMIF201\\_CCLE\\_Cluster\\_DrugSensitivity/](https://brandonsie.shinyapps.io/BMIF201_CCLE_Cluster_DrugSensitivity/)
+Shiny App: [https://brandonsie.shinyapps.io/BMIF201\_CCLE\_Cluster\_DrugSensitivity/](https://brandonsie.shinyapps.io/BMIF201_CCLE_Cluster_DrugSensitivity/)
