@@ -1,5 +1,6 @@
 library(shiny)
 library(shinythemes)
+library(markdown)
 
 # UI inputs / ouputs
 shinyUI(fluidPage(theme = shinytheme("flatly"), 
